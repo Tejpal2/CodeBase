@@ -1,0 +1,89 @@
+<nav class="breadcrumb">
+        <a href="card/searchCard">Search a Card</a> > 
+        <a *ngIf="addMode" class="active" href="card">{{breadCrumbText}}</a> >
+        <a class="active" *ngIf="!addMode" href="card/view/{{savedCardkey}}">{{breadCrumbText}}</a>
+  </nav> 
+  
+<div class="section-heading">
+    <h2>CARD - <span>{{cardHeading}}</span>
+   <span *ngIf = "cardCommentImportance" ><i class="fa fa-flag" aria-hidden="true"></i></span>
+   </h2>
+</div>
+
+<!-- general-information-form -->
+<general-information-form [CardGeneralInformationFormGroup]="FormGroup.controls.CardGeneralInformationFormGroup" [grnlInfoViewMode] = "viewMode" [grnlInfoEditMode]="editMode" [grnlInfoAddMode]="addMode"></general-information-form>
+
+<!-- card-eligibility-form -->
+<card-eligibility-form (coIdEvent)="getPlans($event)" [CardEligibilityFormGroup]='FormGroup.controls.CardEligibilityFormGroup' [cardElgbViewMode] = "viewMode" [cardElgbEditMode]="editMode"></card-eligibility-form>
+
+<!-- card-address form -->
+<card-address [cardaddress]='FormGroup.controls.cardaddress' [adrsViewMode] = "viewMode" [adrsEditMode]="editMode"></card-address>
+
+<!-- card bank account  module -->
+<card-bank-acc [cardbankacc]='FormGroup.controls.cardbankacc' [bnkAccViewMode] = "viewMode"[bnkAccEditMode]="editMode"></card-bank-acc>
+
+<!-- <card-holder *ngIf ="addCrdHlderDetails" ></card-holder> -->
+<card-holder [viewMode]="viewMode"  *ngIf ="viewMode || editMode"></card-holder> 
+
+<!-- Comment module starts -->
+<div class="grid-box">
+    <div class="grid-heading">
+        <h3>Comments</h3>
+    </div>
+    <!-- Grid Heading Ends -->
+    <app-comment-model *ngIf="addMode" [commentFormEditMode]=true></app-comment-model>
+    <div *ngIf="!addMode" class="grid-inner">
+        <form [formGroup]="commentForm">
+            <div  class="form-row">
+                <label>Add Comment</label>
+                <div class="add-comments">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <textarea class="fm-txt form-control" formControlName="commentTxt"></textarea>
+                            <show-errors [control]="commentForm.controls.commentTxt"></show-errors>
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="check-lb">
+                                <input type="checkbox" formControlName="isImportant" />
+                                <span class="check-flag">
+                                    <i class="fa fa-flag" aria- hidden="true"></i>
+                                </span>Importance</label>
+                        </div>
+                        <div class="col-sm-2 text-right">
+                        <button class="green-btn-add btn" (click)="updateComment(commentForm)">
+                        <i class="fa fa-plus"></i> Add </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Form Row Ends -->
+        </form>
+        <div class="form-row">
+            <div class="row">
+                <div class="col-md-12 col-xs-12 table-col">
+                    <div class="table-responsive">
+                    <table id="cardComments" class="display table table-bordered table-stripped"></table>
+                    </div>
+                    <!-- Table Ends -->
+                </div>
+            </div>
+        </div>
+        <!-- Form Row ENds -->
+    </div>
+    <!-- Grid Inner Ends -->
+
+</div>
+<!-- Grid Box Ends -->
+
+<!-- Main form for Card Sections -->
+<form [formGroup]="FormGroup">
+    <!-- Buttons for card section-->
+    <div class="form-row text-center">
+        <button *ngIf ="addMode" title="SAVE" class="btn green-btn btn-lg" type="submit" (click)="submitCardForm(FormGroup,false)" >SAVE</button>
+        <button *ngIf ="viewMode" title="Card - Edit Details" class="btn green-btn btn-lg" type="button" (click)="enableEditMode()">EDIT</button>
+        <button *ngIf="editMode" title="Card - Update Details" class="btn green-btn btn-lg" type="button" (click)="updateCardData()">UPDATE</button>
+    </div>	
+</form> 
+<div id="Trusty" class="modal fade" role="dialog">
+    <app-card-trustee></app-card-trustee>
+</div>
